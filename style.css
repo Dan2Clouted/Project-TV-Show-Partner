@@ -1,3 +1,31 @@
 #root {
   color: red;
 }
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+#root {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.episode-card {
+  background-color: white;
+  padding: 10px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.episode-card img {
+  width: 100%;
+}
+
+.episode-card h2 {
+  font-size: 1rem;
+  text-align: center;
+}
