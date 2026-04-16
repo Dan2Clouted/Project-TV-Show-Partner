@@ -1,24 +1,10 @@
-//You can edit ALL of the code here
-function setup() {
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
-}
-
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
+
   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 
-  const episodeCount = document.createElement("p");
-  episodeCount.textContent = `Got ${episodeList.length} episode(s)`;
-  rootElem.appendChild(episodeCount);
-
-  const credit = document.createElement("p");
-  credit.innerHTML =
-    'Data from <a href="https://tvmaze.com" target="_blank">TVMaze.com</a>';
-  rootElem.appendChild(credit);
-
-  for (const episode of episodeList) {
-    const card = makeEpisodeCard(episode);
+  for (let i = 0; i < episodeList.length; i++) {
+    const card = makeEpisodeCard(episodeList[i]);
     rootElem.appendChild(card);
   }
 }
@@ -40,4 +26,17 @@ function makeEpisodeCard(episode) {
   return card;
 }
 
-window.onload = setup;
+let allEpisodes = [];
+
+fetch("https://api.tvmaze.com/shows/82/episodes")
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data) {
+    allEpisodes = data;
+    document.getElementById("message").textContent = "";
+    makePageForEpisodes(allEpisodes);
+  })
+  .catch(function () {
+    document.getElementById("message").textContent = "Error loading data";
+  });
