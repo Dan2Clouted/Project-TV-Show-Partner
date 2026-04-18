@@ -9,8 +9,8 @@ function setup() {
 
   // FETCH ALL SHOWS
   fetch("https://api.tvmaze.com/shows")
-    .then(res => res.json())
-    .then(shows => {
+    .then((res) => res.json())
+    .then((shows) => {
       allShows = shows;
 
       populateShowSelector(allShows);
@@ -24,16 +24,16 @@ function setup() {
   setupSearch();
 }
 
-// 🔍 SEARCH (UPDATED TO USE CURRENT EPISODES)
 function setupSearch() {
   const searchInput = document.getElementById("search");
 
   searchInput.addEventListener("input", function () {
     const term = searchInput.value.toLowerCase();
 
-    const filtered = currentEpisodes.filter(ep =>
-      ep.name.toLowerCase().includes(term) ||
-      ep.summary.toLowerCase().includes(term)
+    const filtered = currentEpisodes.filter(
+      (ep) =>
+        ep.name.toLowerCase().includes(term) ||
+        ep.summary.toLowerCase().includes(term),
     );
 
     showEpisodeCards(filtered);
@@ -42,7 +42,6 @@ function setupSearch() {
   });
 }
 
-// 📺 SHOW SELECTOR
 function populateShowSelector(shows) {
   const selector = document.getElementById("show-select");
 
@@ -50,7 +49,7 @@ function populateShowSelector(shows) {
 
   // SORT ALPHABETICALLY
   shows.sort((a, b) =>
-    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
   );
 
   const defaultOption = document.createElement("option");
@@ -68,7 +67,6 @@ function populateShowSelector(shows) {
   selector.addEventListener("change", handleShowChange);
 }
 
-// 🎯 WHEN SHOW CHANGES
 function handleShowChange() {
   const showId = this.value;
   const message = document.getElementById("message");
@@ -85,8 +83,8 @@ function handleShowChange() {
   message.textContent = "Loading episodes...";
 
   fetch(`https://api.tvmaze.com/shows/${showId}/episodes`)
-    .then(res => res.json())
-    .then(episodes => {
+    .then((res) => res.json())
+    .then((episodes) => {
       episodeCache[showId] = episodes;
       currentEpisodes = episodes;
 
@@ -99,14 +97,12 @@ function handleShowChange() {
     });
 }
 
-// 🎬 RENDER ALL
 function renderEpisodes(list) {
   showEpisodeCards(list);
   updateCount(list);
   populateEpisodeSelector(list);
 }
 
-// 🎬 CREATE CARD
 function makeEpisodeCard(episode) {
   const season = String(episode.season).padStart(2, "0");
   const number = String(episode.number).padStart(2, "0");
@@ -123,7 +119,6 @@ function makeEpisodeCard(episode) {
   return card;
 }
 
-// 🎥 RENDER EPISODES
 function showEpisodeCards(episodeList) {
   const container = document.getElementById("episode-container");
   container.innerHTML = "";
@@ -134,13 +129,11 @@ function showEpisodeCards(episodeList) {
   }
 }
 
-// 🔢 COUNT
 function updateCount(episodeList) {
   const countElem = document.getElementById("count");
   countElem.textContent = `Displaying ${episodeList.length} episode(s)`;
 }
 
-// 📋 EPISODE SELECTOR
 function populateEpisodeSelector(episodeList) {
   const selector = document.getElementById("episode-selector");
 
@@ -167,7 +160,7 @@ function populateEpisodeSelector(episodeList) {
     if (value === "all") {
       renderEpisodes(currentEpisodes);
     } else {
-      const selected = currentEpisodes.find(ep => ep.id == value);
+      const selected = currentEpisodes.find((ep) => ep.id == value);
       renderEpisodes([selected]);
     }
   });
