@@ -1,50 +1,52 @@
-// You can edit ALL of the code here
 let allEpisodes = [];
 
 function setup() {
-  allEpisodes = getAllEpisodes();
+  const countElem = document.getElementById("count");
+  countElem.textContent = "Loading episodes...";
 
-  // Initial render
-  showEpisodeCards(allEpisodes);
-  updateCount(allEpisodes);
-  populateEpisodeSelector(allEpisodes);
+  fetch("https://api.tvmaze.com/shows/82/episodes")
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (episodes) {
+      allEpisodes = episodes;
 
-  // 🔍 SEARCH
-  const searchInput = document.getElementById("search");
-
-  searchInput.addEventListener("input", function () {
-    const searchText = searchInput.value.toLowerCase();
-
-    const filteredList = allEpisodes.filter((episode) => {
-      return (
-        episode.name.toLowerCase().includes(searchText) ||
-        episode.summary.toLowerCase().includes(searchText)
-      );
-    });
-
-    showEpisodeCards(filteredList);
-    updateCount(filteredList);
-  });
-
-  // 📌 DROPDOWN SELECTOR (FIXED POSITION)
-  const selector = document.getElementById("episode-selector");
-
-  selector.addEventListener("change", function () {
-    const selectedValue = selector.value;
-
-    if (selectedValue === "all") {
       showEpisodeCards(allEpisodes);
       updateCount(allEpisodes);
-    } else {
-      const selectedEpisode = allEpisodes[selectedValue];
+      populateEpisodeSelector(allEpisodes);
 
-      showEpisodeCards([selectedEpisode]);
-      updateCount([selectedEpisode]);
-    }
-  });
+      const searchInput = document.getElementById("search");
+      searchInput.addEventListener("input", function () {
+        const searchText = searchInput.value.toLowerCase();
+        const filteredList = allEpisodes.filter(function (episode) {
+          return (
+            episode.name.toLowerCase().includes(searchText) ||
+            episode.summary.toLowerCase().includes(searchText)
+          );
+        });
+        showEpisodeCards(filteredList);
+        updateCount(filteredList);
+      });
+
+      const selector = document.getElementById("episode-selector");
+      selector.addEventListener("change", function () {
+        const selectedValue = selector.value;
+        if (selectedValue === "all") {
+          showEpisodeCards(allEpisodes);
+          updateCount(allEpisodes);
+        } else {
+          const selectedEpisode = allEpisodes[selectedValue];
+          showEpisodeCards([selectedEpisode]);
+          updateCount([selectedEpisode]);
+        }
+      });
+    })
+    .catch(function () {
+      countElem.textContent =
+        "Something went wrong loading the episodes. Please try again.";
+    });
 }
 
-// 🎬 CREATE EPISODE CARD
 function makeEpisodeCard(episode) {
   const season = String(episode.season).padStart(2, "0");
   const number = String(episode.number).padStart(2, "0");
@@ -61,28 +63,22 @@ function makeEpisodeCard(episode) {
   return card;
 }
 
-// 🎥 RENDER EPISODES
 function showEpisodeCards(episodeList) {
   const container = document.getElementById("episode-container");
-
-  container.innerHTML = ""; // CLEAR FIRST
-
+  container.innerHTML = "";
   for (let episode of episodeList) {
     const card = makeEpisodeCard(episode);
     container.appendChild(card);
   }
 }
 
-// 🔢 UPDATE COUNT
 function updateCount(episodeList) {
   const countElem = document.getElementById("count");
-  countElem.textContent = `Displaying ${episodeList.length} episode(s)`;
+  countElem.textContent = "Displaying " + episodeList.length + " episode(s)";
 }
 
-// 📋 POPULATE DROPDOWN
 function populateEpisodeSelector(episodeList) {
   const selector = document.getElementById("episode-selector");
-
   selector.innerHTML = "";
 
   const defaultOption = document.createElement("option");
@@ -92,14 +88,11 @@ function populateEpisodeSelector(episodeList) {
 
   for (let i = 0; i < episodeList.length; i++) {
     const episode = episodeList[i];
-
     const season = String(episode.season).padStart(2, "0");
     const number = String(episode.number).padStart(2, "0");
-
     const option = document.createElement("option");
     option.value = i;
-    option.textContent = `S${season}E${number} - ${episode.name}`;
-
+    option.textContent = "S" + season + "E" + number + " - " + episode.name;
     selector.appendChild(option);
   }
 }

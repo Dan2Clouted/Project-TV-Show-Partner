@@ -1,40 +1,30 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TV Show Project | Karim(KKtech06)</title>
-    <link href="style.css" rel="stylesheet" />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  </head>
 
-  <body>
-    <div id="root"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TV Show Project | Karim(KKtech06)</title>
+  <link href="style.css" rel="stylesheet" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+</head>
 
-    <input id="search" placeholder="Search..." />
+<body>
+  <input id="search" placeholder="Search..." />
+  <select id="episode-selector"></select>
+  <p id="count"></p>
 
-    <select id="episode-selector"></select>
+  <div id="episode-container"></div>
 
-    <p id="count"></p>
+  <div class="tvMaze">
+    <p>
+      Data originally sourced from
+      <a href="https://www.tvmaze.com" target="_blank" rel="noopener noreferrer">TVMaze.com</a>.
+      Visit their site for more information.
+    </p>
+  </div>
 
-    <div id="episode-container"></div>
+  <script src="script.js"></script>
+</body>
 
-    <div class="tvMaze">
-      <p>
-        Data originally sourced from
-        <a
-          href="https://www.tvmaze.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          >TVMaze.com</a
-        >. Visit their site for more information.
-      </p>
-    </div>
-
-    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-    <script src="episodes.js"></script>
-
-    <!-- Loads YOUR javascript code -->
-    <script src="script.js"></script>
-  </body>
 </html>
